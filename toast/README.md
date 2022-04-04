@@ -1,6 +1,6 @@
 # Toast - Simple but Good
 
-![toast](media/toast.jpg)
+<img src="https://raw.githubusercontent.com/vpzed/keyboards/main/toast/media/toast.png" width="200">
 
 A 34 key split ergo keyboard designed with [ergogen](https://github.com/ergogen/ergogen) v3.1
 
