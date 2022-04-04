@@ -4,6 +4,10 @@
 
 A 34 key split ergo keyboard designed with [ergogen](https://github.com/ergogen/ergogen) v3.1
 
+Early Prototype layout: 
+
+<img src="https://raw.githubusercontent.com/vpzed/keyboards/main/toast/media/toast-proto1.png" width="500">
+
 ## Ergo Features
 - No row stagger
 - Aggressive column stagger
