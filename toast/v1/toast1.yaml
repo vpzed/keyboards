@@ -1,0 +1,198 @@
+# toast split ergo keyboard
+# https://github.com/vpzed
+
+# For ergogen v3.1
+# https://github.com/ergogen/ergogen
+# Thanks to all the helpful people at the Absolem Club Discord
+
+### Begin
+
+units:
+
+  ### Reference units for components
+  kx: 18			# choc switch x spacing of 18mm 
+  ky: 17			# choc switch y spacing of 17mm
+  cap_x: 17.5		# MBK keycap x size of 17.5mm
+  cap_y: 16.5		# MBK keycap y size of 16.5mm
+  plate_sq: 13.9	# plate hole to accomidate choc switch body of 13.80mm square
+  # PJ-320A footprint in Kicad is 6mm wide x 14mm long with connector facing up
+  trrs_x: 6
+  trrs_y: 14
+  # ProMicro footprint in Kicad is 18mm wide x 33mm long with connector facing up
+  mcu_x: 18
+  mcu_y: 33
+  # Ergogen web GUI weirdness
+  visual_x: 1     # Visual representation of keycaps horizontal
+  visual_y: 1     # Visual representation of keycaps vertical
+
+  ### Parameters for tweaking
+  # Body angle is to provide a square edge on the pinky side to allow for tenting
+  # while still supporting the desired angle of the columns for neutral wrist position
+  body_angle: 11	# Angle in degrees from outer square edge on pinky side to middle column
+  
+  # Column stagger starting with pinky as reference, so 
+  # positive going pinky through middle, then negative from middle to inner
+  # pinky, ring, middle, index, inner
+  ring_stag: ky * 2/3
+  middle_stag: ky * 1/3
+  index_stag: -ky * 2/3
+  inner_stag: -ky * 1/6
+  # adjustment to center ring column due to slop caused by pinky and ring splay
+  ring_x_adj: 0.4
+  
+  # Pinky to ring column splay in degress
+  pinky_splay: 5
+  # Ring to middle column splay in degrees
+  ring_splay: 5
+
+points:
+
+  zones.fingers:
+    rotate: -body_angle + pinky_splay + ring_splay
+    anchor:
+      # Shift the board so ergogen puts it closer to the center in Kicad
+      shift: [140, -160]
+    key: &key
+      width: kx
+      height: ky
+      tags:
+        keys: true 
+      footprints:
+        choc:
+          type: choc
+          nets:
+            from: GND
+            to: =name
+          params:
+              keycaps: true
+              reverse: true
+    columns:
+      pinky:
+        spread: kx
+        origin: [0, -ky]
+      ring:
+        spread: kx
+        stagger: ring_stag
+        rotate: -pinky_splay
+        origin: [0, -ky]
+        key:
+          shift: [ring_x_adj, 0]
+      middle:
+        spread: kx
+        stagger: middle_stag
+        rotate: -ring_splay
+        origin: [0, -ky]
+      index:
+        spread: kx
+        stagger: index_stag
+        rotate: 0
+        origin: [0, -ky]
+      inner:
+        spread: kx
+        stagger: inner_stag
+        origin: [0, -ky]
+        rows: 
+    rows:
+      bottom.padding: ky
+      home.padding: ky
+      top.padding: ky
+
+  zones.thumbs:
+    anchor:
+      ref: fingers_index_bottom
+      shift: [5,-26]
+    key: *key
+    columns:
+      first:
+        key.name: thumb_tucky
+        rotate: 10
+      second:
+        spread: kx
+        rotate: -15
+        origin: [-11, -ky]
+        key:
+          name: thumb_home
+          shift: [0, 0.2]
+    rows:
+      only:
+        padding: cy
+
+  zones.mcu:
+    anchor:
+      ref: fingers_inner_top
+      rotate: body_angle
+      shift: [20, 19]
+    key:
+      name: mcu
+      width: mcu_x
+      height: mcu_y
+      footprints:
+      - type: promicro
+        anchor:
+          rotate: -90
+        params:
+          orientation: down
+        nets:
+          P7: fingers_pinky_bottom
+          P6: fingers_pinky_home
+          P5: fingers_pinky_top
+          P4: fingers_ring_bottom
+          P3: fingers_ring_home
+          P2: fingers_ring_top
+          P16: fingers_middle_bottom
+          P14: fingers_middle_home
+          P15: fingers_middle_home
+          P10: fingers_index_bottom
+          P18: fingers_index_home
+          P19: fingers_index_top
+          P1: fingers_inner_bottom
+          P20: fingers_inner_home
+          P21: fingers_inner_top
+          P8: thumb_tucky
+          P9: thumb_home
+
+  zones.trrs:
+    anchor:
+      ref: fingers_inner_home
+      rotate: body_angle
+      shift: [6.5, 50]
+    key:
+      name: trrs
+      width: trrs_x
+      height: trrs_y
+      footprints:
+      - type: trrs
+        params:
+          reverse: true
+          symmetric: true
+        nets:
+          A: GND
+          B: GND
+          C: P0
+          D: VCC
+  
+outlines:
+  exports:
+
+    raw:
+      - type: rectangle
+        anchor:
+          ref: fingers_inner_top
+          rotate: body_angle
+          shift: [-74, -86]
+        size: [123, 103]
+        corner: 0
+        operation: stack 
+
+    panel:
+      - type: outline
+        name: raw
+        fillet: 1
+
+pcbs:
+  toast-v1:
+    outlines:
+      main:
+        outline: panel
+
+### End
