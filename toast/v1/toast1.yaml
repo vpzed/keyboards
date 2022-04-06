@@ -1,5 +1,5 @@
 # toast split ergo keyboard
-# https://github.com/vpzed
+# https://github.com/vpzed/keyboards/tree/main/toast/v1
 
 # For ergogen v3.1
 # https://github.com/ergogen/ergogen
@@ -15,6 +15,9 @@ units:
   cap_x: 17.5		# MBK keycap x size of 17.5mm
   cap_y: 16.5		# MBK keycap y size of 16.5mm
   plate_sq: 13.9	# plate hole to accomidate choc switch body of 13.80mm square
+  # Reset switch footprint in Kicad is 3.5mm wide x 8.5mm long with pads vertical
+  reset_x: 3.5
+  reset_y: 8.5
   # PJ-320A footprint in Kicad is 6mm wide x 14mm long with connector facing up
   trrs_x: 6
   trrs_y: 14
@@ -24,12 +27,15 @@ units:
   # Ergogen web GUI weirdness
   visual_x: 1     # Visual representation of keycaps horizontal
   visual_y: 1     # Visual representation of keycaps vertical
+  # Shift ergogen output into Kicad drawing frame
+  frame_shift_x: 140
+  frame_shift_y: -160
 
   ### Parameters for tweaking
   # Body angle is to provide a square edge on the pinky side to allow for tenting
   # while still supporting the desired angle of the columns for neutral wrist position
   body_angle: 11	# Angle in degrees from outer square edge on pinky side to middle column
-  
+
   # Column stagger starting with pinky as reference, so 
   # positive going pinky through middle, then negative from middle to inner
   # pinky, ring, middle, index, inner
@@ -38,7 +44,7 @@ units:
   index_stag: -ky * 2/3
   inner_stag: -ky * 1/6
   # adjustment to center ring column due to slop caused by pinky and ring splay
-  ring_x_adj: 0.4
+  ring_x_adj: 0
   
   # Pinky to ring column splay in degress
   pinky_splay: 5
@@ -50,8 +56,7 @@ points:
   zones.fingers:
     rotate: -body_angle + pinky_splay + ring_splay
     anchor:
-      # Shift the board so ergogen puts it closer to the center in Kicad
-      shift: [140, -160]
+      shift: [frame_shift_x, frame_shift_y]
     key: &key
       width: kx
       height: ky
@@ -138,14 +143,14 @@ points:
           P5: fingers_pinky_top
           P4: fingers_ring_bottom
           P3: fingers_ring_home
-          P2: fingers_ring_top
-          P16: fingers_middle_bottom
-          P14: fingers_middle_home
-          P15: fingers_middle_home
-          P10: fingers_index_bottom
-          P18: fingers_index_home
-          P19: fingers_index_top
-          P1: fingers_inner_bottom
+          P0: fingers_ring_top
+          P1: fingers_middle_bottom
+          P19: fingers_middle_home
+          P18: fingers_middle_top
+          P15: fingers_index_bottom
+          P14: fingers_index_home
+          P16: fingers_index_top
+          P10: fingers_inner_bottom
           P20: fingers_inner_home
           P21: fingers_inner_top
           P8: thumb_tucky
@@ -153,9 +158,8 @@ points:
 
   zones.trrs:
     anchor:
-      ref: fingers_inner_home
-      rotate: body_angle
-      shift: [6.5, 50]
+      ref: mcu
+      shift: [-(0.5*mcu_x + 0.5*trrs_x - 1), 16]
     key:
       name: trrs
       width: trrs_x
@@ -168,9 +172,24 @@ points:
         nets:
           A: GND
           B: GND
-          C: P0
+          C: P2
           D: VCC
-  
+
+  zones.reset:
+    anchor:
+      ref: trrs
+      shift: [-(0.5*trrs_x + 0.5*reset_x + 3.5), -5]
+      rotate: 90
+    key:
+      name: reset
+      width: reset_x
+      height: reset_y
+      footprints:
+      - type: tactswitch
+        nets:
+          from: GND
+          to: RST
+
 outlines:
   exports:
 
@@ -190,9 +209,61 @@ outlines:
         fillet: 1
 
 pcbs:
-  toast-v1:
+  toast-test1:
     outlines:
       main:
         outline: panel
+    footprints:
+      # Above pinky column
+      mounthole1:
+        type: mountinghole
+        anchor:
+          ref: mcu
+          #rotate: body_angle
+          shift: [-104.5, 10]
+        nets:
+          from: GND
+      # Below pinky column
+      mounthole2:
+        type: mountinghole
+        anchor:
+          ref: mcu
+          #rotate: body_angle
+          shift: [-104.5, -77.25]
+        nets:
+          from: GND
+      # Below middle column
+      mounthole3:
+        type: mountinghole
+        anchor:
+          ref: fingers_middle_bottom
+          shift: [0, -ky]
+        nets:
+          from: GND
+      # Above index column
+      mounthole4:
+        type: mountinghole
+        anchor:
+          ref: fingers_index_top
+          shift: [0, 19]
+        nets:
+          from: GND
+      # Immediately below MCU
+      mounthole5:
+        type: mountinghole
+        anchor:
+          ref: mcu
+          shift: [3, -25 ]
+        nets:
+          from: GND
+      # Farther below MCU
+      mounthole6:
+        type: mountinghole
+        anchor:
+          ref: mcu
+          shift: [3, -77.25]
+        nets:
+          from: GND
+
 
 ### End
