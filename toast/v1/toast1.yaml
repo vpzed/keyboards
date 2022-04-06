@@ -209,7 +209,7 @@ outlines:
         fillet: 1
 
 pcbs:
-  toast-test1:
+  toast-v1:
     outlines:
       main:
         outline: panel
