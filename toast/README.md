@@ -6,9 +6,9 @@ A 34 key split ergo keyboard designed with [ergogen](https://github.com/ergogen/
 
 Early Prototype layout: 
 
-<img src="https://raw.githubusercontent.com/vpzed/keyboards/main/toast/media/toast-pcb-2d.png" width="500">
+<img src="https://raw.githubusercontent.com/vpzed/keyboards/main/toast/media/toast1-pcb-2d.png" width="500">
 
-<img src="https://raw.githubusercontent.com/vpzed/keyboards/main/toast/media/toast-pcb-3d.png" width="500">
+<img src="https://raw.githubusercontent.com/vpzed/keyboards/main/toast/media/toast1-pcb-3d.png" width="500">
 
 ## Ergo Features
 - No row stagger
