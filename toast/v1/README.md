@@ -9,6 +9,6 @@ Early prototype
 **This design is untested**
 
 PCB added
-
-Gerbers to be added soon
+Gerbers added
+Order placed for PCBs
 
