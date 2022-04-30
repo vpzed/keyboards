@@ -4,11 +4,8 @@ Config uses ergogen 3.1 fork at
 https://github.com/MvEerd/ergogen
 for the extra footprints
 
-Early prototype
-
-**This design is untested**
-
 - PCB added
 - Gerbers added
-- Order placed for PCBs
-
+- Boards ordered from posted gerbers
+- First keyboard build completed with no issues
+- QMK a_dux firmware works with no changes
