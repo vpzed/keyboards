@@ -25,6 +25,8 @@ Keyboard had been built from posted gerbers!
 
 ## BOM
 
+[Gerbers ZIP file for use with JLCPCB or similar](https://github.com/vpzed/keyboards/raw/main/toast/v1/gerbers/gerbers.zip)
+
 Required:
 - 2 Toast PCBs **Note**: The PCBs are reversible, so a minimum order of 5 boards is enough for 2 keyboards and a spare in case of issues
 - 34 Kaihl Choc v1 switches (PG1350)
